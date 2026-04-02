@@ -38,6 +38,7 @@ float getMatrixClosestToMean(float m[N][N]);                   // Элемент
 
 void main()
 {
+    setlocale(LC_ALL, "ru_RU.UTF-8");
     float m[N][N];
     int i, j;
     
