@@ -7,3 +7,7 @@
 
 *.docx
 *.drawio
+*.exe
+*ilk
+*.obj
+*.pdb
