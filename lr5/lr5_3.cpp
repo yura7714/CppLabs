@@ -5,6 +5,7 @@
 
 using namespace std;
 
+// функция, которая шифрует контент файла inputFileName по ключу key и выводит его в outputFileName
 bool processFile(const string& inputFileName, 
                  const string& outputFileName, 
                  const string& key) {
