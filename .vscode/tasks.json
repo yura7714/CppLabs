@@ -32,9 +32,8 @@
                 "/EHsc",
                 "/Zi",
                 "/Fe:",
-                "${workspaceFolder}\\lr6\\lr6.exe",
-                "${workspaceFolder}\\lr6\\lr6.cpp",
-                "${workspaceFolder}\\lr6\\Stroka.cpp"
+                "${fileDirname}\\${fileBasenameNoExtension}.exe",
+                "${fileDirname}\\*.cpp"
             ],
             "group": {
                 "kind": "build",
