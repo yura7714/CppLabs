@@ -28,10 +28,13 @@ Stroka::~Stroka() {
 
 // Переопределение оператора присваивания
 Stroka& Stroka::operator=(const Stroka& s) {
-    int length = dlina1(s.str);
-    str = new char[length + 1];
-
-    kopir(str, s.str);
+    if (this != &s) {  // Защита от присваивания самому себе
+        delete[] str;  // Освобождаем старую память
+        
+        int length = dlina1(s.str);
+        str = new char[length + 1];  // Выделяем новую
+        kopir(str, s.str);
+    }
     return *this;
 }
 

@@ -2,7 +2,7 @@ class Stroka {
     char* str;
 public:
     Stroka(char*);
-    Stroka() {}
+    Stroka() : str(nullptr) {}
     Stroka(const Stroka&);
     ~Stroka();
     Stroka& operator=(const Stroka&);
