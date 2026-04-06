@@ -9,8 +9,8 @@ class Person {
         int age;
         string gender;
         Person(string name, int age, string gender);
-        virtual void sleep();
-        virtual void sit();
+        virtual void sleep() = 0;
+        virtual void sit() = 0;
 };
 
 class Driver: public Person {
@@ -73,21 +73,14 @@ void Trucker::sit() {
 
 int main() {
     setlocale(LC_ALL, "ru_RU.UTF-8");
-    Person person("София", 22, "жен");
     Driver driver("Илья", 38, "муж", 14);
     Trucker trucker("Михаил", 41, "муж", 23, 704);
-
-    cout << "sleep() для Person:" << endl;
-    person.sleep();
 
     cout << "sleep() для Driver:" << endl;
     driver.sleep();
 
     cout << "sleep() для Trucker:" << endl;
     trucker.sleep();
-
-    cout << "sit() для Person:" << endl;
-    person.sit();
 
     cout << "sit() для Driver:" << endl;
     driver.sit();
