@@ -1,54 +1,15 @@
 #include <iostream>
-#include <fstream>
-#include <string>
-#include <cstdlib>
+#include <stdio.h>
 
 using namespace std;
 
-// функция, которая шифрует контент файла inputFileName по ключу key и выводит его в outputFileName
-bool processFile(const string& inputFileName, 
-                 const string& outputFileName, 
-                 const string& key) {
-    
-    ifstream inputFile(inputFileName, ios::binary);
-    if (!inputFile.is_open()) {
-        cerr << "Ошибка: Не удалось открыть входной файл: " << inputFileName << endl;
-        return false;
-    }
-    
-    ofstream outputFile(outputFileName, ios::binary);
-    if (!outputFile.is_open()) {
-        cerr << "Ошибка: Не удалось создать выходной файл: " << outputFileName << endl;
-        inputFile.close();
-        return false;
-    }
-    
-    if (key.empty()) {
-        cerr << "Ошибка: Ключ не может быть пустым" << endl;
-        inputFile.close();
-        outputFile.close();
-        return false;
-    }
-    
-    char c;
-    int keyLength = key.length();
-    int keyIndex = 0;
-    
-    while (inputFile.get(c)) {
-        char encodedChar = c ^ key[keyIndex];
-        outputFile.put(encodedChar);
-        keyIndex = (keyIndex + 1) % keyLength;
-    }
-    
-    inputFile.close();
-    outputFile.close();
-    
-    return true;
-}
-
 int main() {
     setlocale(LC_ALL, "ru_RU.UTF-8");
-    string inputFileName, outputFileName, key;
+    char inputFileName[50];
+    char outputFileName[50];
+    char key[50];
+    char ch;
+    int keyIndex = 0, keyLength = 0;
     
     cout << "Введите входной файл, выходной файл и ключ через пробел: " << endl;
     cin >> inputFileName >> outputFileName >> key;
@@ -56,13 +17,35 @@ int main() {
     cout << "\nВходной файл: " << inputFileName << endl;
     cout << "Выходной файл: " << outputFileName << endl;
     cout << "Ключ: " << key << endl;
+
+    char* ptr = key;
+    while (*ptr != '\0') {
+        keyLength++;
+        ptr++;
+    }
+
     cout << "Обработка файла..." << endl;
-    
-    if (processFile(inputFileName, outputFileName, key)) {
-        cout << "Успех! Файл обработан." << endl;
-        return 0;
-    } else {
-        cerr << "Ошибка: Не удалось обработать файл" << endl;
+
+    FILE* in;
+    FILE *out;
+
+    if((in=fopen(inputFileName, "r")) == NULL) {
+        cout << "Файл " << inputFileName << " не открыт!" << endl;
         return 1;
     }
+
+    if ((out = fopen(outputFileName, "w")) == NULL) {
+        cout << "Файл " << outputFileName << " не открыт!" << endl;
+        return 1;
+    }
+
+    while (!feof(in)) {
+        ch = getc(in);
+
+        char encodedChar = ch ^ key[keyIndex];
+        fputc(encodedChar, out);
+        keyIndex = (keyIndex + 1) % keyLength;
+    }
+
+    cout << "Файл обработан" << endl;
 }
