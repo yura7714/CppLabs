@@ -18,6 +18,7 @@ int main() {
     cout << "Выходной файл: " << outputFileName << endl;
     cout << "Ключ: " << key << endl;
 
+    // Находим длину ключа
     char* ptr = key;
     while (*ptr != '\0') {
         keyLength++;
@@ -29,19 +30,23 @@ int main() {
     FILE* in;
     FILE *out;
 
+    // Открываем файл для чтения
     if((in=fopen(inputFileName, "r")) == NULL) {
         cout << "Файл " << inputFileName << " не открыт!" << endl;
         return 1;
     }
 
+    // Открываем файл для записи
     if ((out = fopen(outputFileName, "w")) == NULL) {
         cout << "Файл " << outputFileName << " не открыт!" << endl;
         return 1;
     }
 
+    // Считываем файл для чтения до конца посимвольно
     while (!feof(in)) {
         ch = getc(in);
 
+        // Шифруем каждый символ на ключ
         char encodedChar = ch ^ key[keyIndex];
         fputc(encodedChar, out);
         keyIndex = (keyIndex + 1) % keyLength;
