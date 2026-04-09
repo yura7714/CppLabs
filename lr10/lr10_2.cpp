@@ -25,6 +25,11 @@ template <class T>
 Node<T> *insert(Node<T> *const pbeg, Node<T> **pend, int key, T d);
 template <class T>
 void printList(Node<T> *const ptrBegin);
+template <class T>
+bool moveItem(int itemId, Node<T> **firstListBegin,
+                        Node<T> **firstListEnd,
+                        Node<T> **secondListBegin,
+                        Node<T> **secondListEnd);
 //---------------------------------------------------
 
 class Bus {
@@ -86,20 +91,9 @@ int main()
             int busId;
             cin >> busId;
 
-            Node<Bus*> *foundBus = find(pbegPark, busId);
-
-            if (foundBus == nullptr) {
+            if (!(moveItem(busId, &pbegPark, &pendPark, &pbegRoute, &pendRoute))) {
                 cout << "Автобус с номером " << busId << " отсутствует в парке!" << endl;
-            } else {
-                // если ещё ни один автобус не на маршруте
-                if (pbegRoute == nullptr) {
-                    pbegRoute = first(foundBus->d);
-                    pendRoute = pbegRoute;
-                } else {
-                    add(&pendRoute, foundBus->d);
-                }
-                
-                remove(&pbegPark, &pendPark, busId);
+            } else {                
                 cout << "Автобус с номером " << busId << " вышел на маршрут!" << endl;
             }
         } else if (choice == 4) {
@@ -108,20 +102,10 @@ int main()
             int busId;
             cin >> busId;
 
-            Node<Bus*> *foundBus = find(pbegRoute, busId);
-
-            if (foundBus == nullptr) {
+            if (!(moveItem(busId, &pbegRoute, &pendRoute, &pbegPark, &pendPark))) {
                 cout << "Автобус с номером " << busId << " отсутствует на маршруте!" << endl;
             } else {
-                if (pbegPark == nullptr) {
-                    pbegPark = first(foundBus->d);
-                    pendPark = pbegPark;
-                } else {
-                    add(&pendPark, foundBus->d);
-                }
-                
-                remove(&pbegRoute, &pendRoute, busId);
-                cout << "Автобус с номером " << busId << " в парке!" << endl;
+                cout << "Автобус с номером " << busId << " приехал в парк!" << endl;
             }
         }
 
@@ -243,4 +227,29 @@ void printList(Node<T>* const ptrBegin) {
         cout << left << setw(20) << pv->d->id << setw(30) << pv->d->driverName << setw(10) << pv->d->routeId << endl;
         pv = pv->next;
     }
+}
+
+// переместить элемент с id = itemId из firstList в secondList
+template <class T>
+bool moveItem(int itemId, Node<T> **firstListBegin,
+                        Node<T> **firstListEnd,
+                        Node<T> **secondListBegin,
+                        Node<T> **secondListEnd) {
+    Node<T> *foundItem = find(*firstListBegin, itemId);
+
+    if (foundItem == nullptr) {
+        return false;
+    } 
+
+    // если ещё ни одного элемента во втором списке
+    if (*secondListBegin == nullptr) {
+        *secondListBegin = first(foundItem->d);
+        *secondListEnd = *secondListBegin;
+    } else {
+        add(secondListEnd, foundItem->d);
+    }
+    
+    remove(firstListBegin, firstListEnd, itemId);
+
+    return true;
 }
